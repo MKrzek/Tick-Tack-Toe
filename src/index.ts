@@ -50,6 +50,16 @@ function createCell(row: Row, col: Column, content: Cell = "") {
   return cell;
 }
 function checkBoard(): Cell | "Draw" {
+  for (let victory of victories) {
+    const cell1 = boardState[victory[0][1]][victory[0][1]]
+    const cell2 = boardState[victory[1][0]][victory[1][1]]
+    const cell3 = boardState[victory[2][0]][victory[2][1]]
+
+    if (cell1 !== "" && cell1 === cell2 && cell1 === cell3) {
+      return cell1
+    }
+  }
+
   let isDraw = true;
   for (let i = 0; i < ROW_COUNT; i++) {
     for (let j = 0; j < COL_COUNT; j++) {
@@ -75,7 +85,7 @@ function renderBoard() {
   }
   const moveElement = document.createElement("p");
   moveElement.id = "move-element";
-  moveElement.innerText = `Next Move: ${currentMove}`;
+  moveElement.innerText = winner ? `Winner: ${winner}` : `Next Move: ${currentMove}`;
   moveElement.classList.add("current-move");
   appElement.insertBefore(moveElement, document.getElementById("reset"));
 }
@@ -90,6 +100,7 @@ function init() {
       ["", "", ""]
     ];
     currentMove = "X";
+    winner = ""
     renderBoard();
   });
   renderBoard();
